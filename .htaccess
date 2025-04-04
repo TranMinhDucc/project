@@ -1,0 +1,17 @@
+RewriteEngine On
+RewriteBase /project/
+
+# Nếu file hoặc thư mục không tồn tại, chuyển hướng đến index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Set default character set
+AddDefaultCharset UTF-8
+
+# Enable following symbolic links
+Options +FollowSymLinks
+
+# PHP settings
+php_value display_errors On
+php_value mbstring.internal_encoding UTF-8

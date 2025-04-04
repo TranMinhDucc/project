@@ -6,7 +6,7 @@
     <title>ShoesStyle - Thế Giới Giày Chất Lượng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="/project/views/css/style.css">
 </head>
 <body>
     <!-- Header -->
@@ -14,19 +14,19 @@
     <div class="container">
         <div class="header-wrapper">
             <div class="logo">
-                <a href="/">
+                <a href="/project/">
                     <h1>ShoesStyle</h1>
                 </a>
             </div>
             
             <nav class="main-nav">
                 <ul>
-                    <li><a href="/" class="active">Trang chủ</a></li>
-                    <li><a href="/collections/men">Nam</a></li>
-                    <li><a href="/collections/women">Nữ</a></li>
-                    <li><a href="/collections/kids">Trẻ em</a></li>
-                    <li><a href="/collections/sport">Thể thao</a></li>
-                    <li><a href="/sale">Khuyến mãi</a></li>
+                    <li><a href="/project/" class="active">Trang chủ</a></li>
+                    <li><a href="/project/collections/men">Nam</a></li>
+                    <li><a href="/project/collections/women">Nữ</a></li>
+                    <li><a href="/project/collections/kids">Trẻ em</a></li>
+                    <li><a href="/project/collections/sport">Thể thao</a></li>
+                    <li><a href="/project/sale">Khuyến mãi</a></li>
                 </ul>
             </nav>
             
@@ -129,7 +129,9 @@
                 <div class="product-card" data-category="new bestseller">
                     <div class="product-badge new">Mới</div>
                     <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Nike Air Max">
+                        <a href="/project/product/1">
+                            <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Nike Air Max">
+                        </a>
                         <div class="product-actions">
                             <button class="action-btn"><i class="fas fa-heart"></i></button>
                             <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
@@ -137,7 +139,7 @@
                         </div>
                     </div>
                     <div class="product-info">
-                        <h3 class="product-name">Nike Air Max 2025</h3>
+                        <h3 class="product-name"><a href="/project/product/1">Nike Air Max 2025</a></h3>
                         <div class="product-brand">Nike</div>
                         <div class="product-price">2.500.000₫</div>
                         <div class="product-rating">
@@ -154,7 +156,9 @@
                 <!-- Product 2 -->
                 <div class="product-card" data-category="bestseller">
                     <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Adidas Ultraboost">
+                        <a href="/project/product/2">
+                            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Adidas Ultraboost">
+                        </a>
                         <div class="product-actions">
                             <button class="action-btn"><i class="fas fa-heart"></i></button>
                             <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
@@ -162,7 +166,7 @@
                         </div>
                     </div>
                     <div class="product-info">
-                        <h3 class="product-name">Adidas Ultraboost 5.0</h3>
+                        <h3 class="product-name"><a href="/project/product/2">Adidas Ultraboost 5.0</a></h3>
                         <div class="product-brand">Adidas</div>
                         <div class="product-price">3.200.000₫</div>
                         <div class="product-rating">
@@ -180,7 +184,9 @@
                 <div class="product-card" data-category="sale">
                     <div class="product-badge sale">-30%</div>
                     <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Puma RS-X">
+                        <a href="/project/product/3">
+                            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Puma RS-X">
+                        </a>
                         <div class="product-actions">
                             <button class="action-btn"><i class="fas fa-heart"></i></button>
                             <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
@@ -188,7 +194,7 @@
                         </div>
                     </div>
                     <div class="product-info">
-                        <h3 class="product-name">Puma RS-X Toys</h3>
+                        <h3 class="product-name"><a href="/project/product/3">Puma RS-X Toys</a></h3>
                         <div class="product-brand">Puma</div>
                         <div class="product-price">
                             <span class="old-price">2.800.000₫</span>
@@ -209,7 +215,9 @@
                 <div class="product-card" data-category="new">
                     <div class="product-badge new">Mới</div>
                     <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Converse Chuck Taylor">
+                        <a href="/project/product/4">
+                            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Converse Chuck Taylor">
+                        </a>
                         <div class="product-actions">
                             <button class="action-btn"><i class="fas fa-heart"></i></button>
                             <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
@@ -217,7 +225,7 @@
                         </div>
                     </div>
                     <div class="product-info">
-                        <h3 class="product-name">Converse Chuck 70s High Top</h3>
+                        <h3 class="product-name"><a href="/project/product/4">Converse Chuck 70s High Top</a></h3>
                         <div class="product-brand">Converse</div>
                         <div class="product-price">1.800.000₫</div>
                         <div class="product-rating">
@@ -233,7 +241,7 @@
             </div>
             
             <div class="view-all-container">
-                <a href="/products" class="btn primary-btn">Xem tất cả sản phẩm</a>
+                <a href="/project/products" class="btn primary-btn">Xem tất cả sản phẩm</a>
             </div>
         </div>
     </section>
@@ -370,6 +378,6 @@
         </div>
     </footer>
 
-    <script src="../js/main.js"></script>
+    <script src="/project/views/js/main.js"></script>
 </body>
 </html>
