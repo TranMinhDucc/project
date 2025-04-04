@@ -22,6 +22,18 @@
                 <span class="current">Sản phẩm</span>
             </nav>
 
+            <?php
+            // Pagination variables
+            $items_per_page = 12;
+            $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $total_items = count($products);
+            $total_pages = ceil($total_items / $items_per_page);
+            $offset = ($current_page - 1) * $items_per_page;
+            
+            // Get products for current page
+            $current_products = array_slice($products, $offset, $items_per_page);
+            ?>
+
             <div class="product-list-wrapper">
                 <!-- Filters -->
                 <aside class="filters">
@@ -109,30 +121,29 @@
                         </div>
                     </div>
 
-                    <?php if (empty($products)): ?>
+                    <?php if (empty($current_products)): ?>
                     <div class="no-products">
                         <i class="fas fa-box-open"></i>
                         <p>Không tìm thấy sản phẩm nào phù hợp với tiêu chí tìm kiếm của bạn.</p>
                     </div>
                     <?php else: ?>
                     <div class="products-grid">
-                        <?php foreach ($products as $product): ?>
+                        <?php foreach ($current_products as $product): ?>
                         <div class="product-card">
-                            <?php if (isset($product['discount_price']) && $product['discount_price'] > 0): ?>
+                            <?php if (isset($product['sale_price']) && $product['sale_price'] > 0): ?>
                             <div class="product-badge sale">
-                                -<?php echo round((1 - $product['discount_price'] / $product['price']) * 100); ?>%
+                                -<?php echo round((1 - $product['sale_price'] / $product['price']) * 100); ?>%
                             </div>
                             <?php endif; ?>
 
                             <div class="product-img">
-                                <img src="<?php echo htmlspecialchars($product['image']); ?>" 
+                                <img src="<?php echo htmlspecialchars($product['image_url'] ?? '/project/images/placeholder.jpg'); ?>" 
                                      alt="<?php echo htmlspecialchars($product['name']); ?>">
                                 
                                 <div class="product-actions">
-                                    <button type="button" class="action-btn quick-view-btn" 
-                                            data-product-id="<?php echo htmlspecialchars($product['id']); ?>">
+                                    <a href="/project/product/<?php echo htmlspecialchars($product['id']); ?>" class="action-btn">
                                         <i class="fas fa-eye"></i>
-                                    </button>
+                                    </a>
                                     <button type="button" class="action-btn wishlist-btn"
                                             data-product-id="<?php echo htmlspecialchars($product['id']); ?>">
                                         <i class="fas fa-heart"></i>
@@ -156,12 +167,12 @@
                                 </div>
                                 
                                 <div class="product-price">
-                                    <?php if (isset($product['discount_price']) && $product['discount_price'] > 0): ?>
+                                    <?php if (isset($product['sale_price']) && $product['sale_price'] > 0): ?>
                                     <span class="old-price">
                                         <?php echo number_format($product['price'], 0, ',', '.'); ?>đ
                                     </span>
                                     <span class="current-price">
-                                        <?php echo number_format($product['discount_price'], 0, ',', '.'); ?>đ
+                                        <?php echo number_format($product['sale_price'], 0, ',', '.'); ?>đ
                                     </span>
                                     <?php else: ?>
                                     <span class="current-price">

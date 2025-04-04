@@ -62,12 +62,15 @@
     <!-- Product Detail -->
     <section class="product-detail">
         <div class="container">
-            <div class="product-detail-wrapper">
+            <div class="product-detail-wrapper" data-product-id="<?php echo isset($product['id']) ? htmlspecialchars($product['id']) : ''; ?>">
                 <!-- Product Images -->
                 <div class="product-images">
                     <div class="main-image">
                         <?php if (!empty($images)): ?>
                             <img src="<?php echo htmlspecialchars($images[0]['image_url']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" id="main-product-image">
+                            <div class="zoom-indicator">
+                                <i class="fas fa-search-plus"></i> Di chuột để phóng to
+                            </div>
                         <?php else: ?>
                             <img src="../images/placeholder.jpg" alt="Không có hình ảnh" id="main-product-image">
                         <?php endif; ?>
@@ -76,7 +79,7 @@
                     <?php if (count($images) > 1): ?>
                         <div class="thumbnail-images">
                             <?php foreach ($images as $index => $image): ?>
-                                <div class="thumbnail" data-image="<?php echo htmlspecialchars($image['image_url']); ?>">
+                                <div class="thumbnail <?php echo $index === 0 ? 'active' : ''; ?>" data-image="<?php echo htmlspecialchars($image['image_url']); ?>">
                                     <img src="<?php echo htmlspecialchars($image['image_url']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?> - Hình <?php echo $index + 1; ?>">
                                 </div>
                             <?php endforeach; ?>
@@ -168,26 +171,30 @@
                         </div>
                     <?php endif; ?>
                     
-                    <!-- Quantity Selection -->
-                    <div class="product-quantity">
-                        <h3>Số lượng</h3>
-                        <div class="quantity-selector">
-                            <button class="quantity-btn minus"><i class="fas fa-minus"></i></button>
-                            <input type="number" id="quantity" value="1" min="1" max="10">
-                            <button class="quantity-btn plus"><i class="fas fa-plus"></i></button>
+                    <!-- Product Actions -->
+                    <div class="cart-actions">
+                        <div class="quantity-input">
+                            <button type="button" class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="10">
+                            <button type="button" class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
                         </div>
-                    </div>
-                    
-                    <!-- Add to Cart -->
-                    <div class="product-actions">
-                        <button class="add-to-cart-btn">
-                            <i class="fas fa-shopping-cart"></i>
-                            Thêm vào giỏ hàng
-                        </button>
-                        <button class="buy-now-btn">
-                            Mua ngay
-                        </button>
-                        <button class="wishlist-btn">
+                        
+                        <div class="cart-buttons">
+                            <button type="button" class="add-to-cart">
+                                <i class="fas fa-shopping-cart"></i>
+                                Thêm vào giỏ
+                            </button>
+                            <button type="button" class="buy-now">
+                                <i class="fas fa-bolt"></i>
+                                Mua ngay
+                            </button>
+                        </div>
+                        
+                        <button type="button" class="wishlist-btn">
                             <i class="far fa-heart"></i>
                         </button>
                     </div>
@@ -324,30 +331,45 @@
         <div class="container">
             <h2 class="section-title">Sản phẩm liên quan</h2>
             <div class="products-grid">
-                <?php foreach ($relatedProducts as $relatedProduct): ?>
-                    <div class="product-card">
-                        <div class="product-img">
-                            <img src="<?php echo htmlspecialchars($relatedProduct['image_url']); ?>" alt="<?php echo htmlspecialchars($relatedProduct['name']); ?>">
-                            <div class="product-actions">
-                                <button class="action-btn"><i class="fas fa-heart"></i></button>
-                                <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
-                                <button class="action-btn"><i class="fas fa-eye"></i></button>
+                <?php if (!empty($relatedProducts)): ?>
+                    <?php foreach ($relatedProducts as $relatedProduct): ?>
+                        <div class="product-card">
+                            <div class="product-img">
+                                <a href="/project/product/<?php echo htmlspecialchars($relatedProduct['id']); ?>">
+                                    <img src="<?php echo !empty($relatedProduct['image_url']) ? htmlspecialchars($relatedProduct['image_url']) : '/project/public/images/placeholder.jpg'; ?>" 
+                                         alt="<?php echo !empty($relatedProduct['name']) ? htmlspecialchars($relatedProduct['name']) : 'Sản phẩm'; ?>">
+                                </a>
+                                <div class="product-actions">
+                                    <button class="action-btn"><i class="fas fa-heart"></i></button>
+                                    <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
+                                    <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-name"><?php echo htmlspecialchars($relatedProduct['name']); ?></h3>
-                            <div class="product-brand"><?php echo htmlspecialchars($relatedProduct['brand_name']); ?></div>
-                            <div class="product-price">
-                                <?php if ($relatedProduct['discount_price'] > 0): ?>
-                                    <span class="old-price"><?php echo number_format($relatedProduct['price'], 0, ',', '.'); ?>₫</span>
-                                    <span class="current-price"><?php echo number_format($relatedProduct['discount_price'], 0, ',', '.'); ?>₫</span>
-                                <?php else: ?>
-                                    <span class="current-price"><?php echo number_format($relatedProduct['price'], 0, ',', '.'); ?>₫</span>
+                            <div class="product-info">
+                                <h3 class="product-name">
+                                    <a href="/project/product/<?php echo htmlspecialchars($relatedProduct['id']); ?>">
+                                        <?php echo !empty($relatedProduct['name']) ? htmlspecialchars($relatedProduct['name']) : 'Sản phẩm không xác định'; ?>
+                                    </a>
+                                </h3>
+                                <?php if (!empty($relatedProduct['brand_name'])): ?>
+                                    <div class="product-brand"><?php echo htmlspecialchars($relatedProduct['brand_name']); ?></div>
                                 <?php endif; ?>
+                                <div class="product-price">
+                                    <?php if (isset($relatedProduct['discount_price']) && $relatedProduct['discount_price'] > 0): ?>
+                                        <span class="old-price"><?php echo number_format($relatedProduct['price'], 0, ',', '.'); ?>₫</span>
+                                        <span class="current-price"><?php echo number_format($relatedProduct['discount_price'], 0, ',', '.'); ?>₫</span>
+                                    <?php else: ?>
+                                        <span class="current-price"><?php echo isset($relatedProduct['price']) ? number_format($relatedProduct['price'], 0, ',', '.') : '0'; ?>₫</span>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="no-related-products">
+                        <p>Không có sản phẩm liên quan.</p>
                     </div>
-                <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>

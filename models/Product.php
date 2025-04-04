@@ -1,16 +1,21 @@
 <?php
 require_once 'Model.php';
+require_once 'config/Database.php';
 
 class Product extends Model {
-    protected $table = 'products';
-    
+    private $db;
+
     public function __construct() {
         parent::__construct();
+        $this->table = 'products';  // Set the table name
+        $database = new Database();
+        $this->db = $database->getConnection();
     }
     
     // Get product by ID with all related information
     public function getProductDetail($id) {
-        $query = "SELECT p.*, b.name as brand_name, c.name as category_name 
+        $query = "SELECT p.*, b.name as brand_name, c.name as category_name,
+                        (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image_url
                  FROM " . $this->table . " p
                  LEFT JOIN brands b ON p.brand_id = b.id
                  LEFT JOIN categories c ON p.category_id = c.id
@@ -35,15 +40,16 @@ class Product extends Model {
         $sampleProducts = [
             1 => [
                 'id' => 1,
-                'name' => 'Nike Air Max 2025',
+                'name' => 'Nike Air Max 270',
                 'brand_id' => 1,
                 'category_id' => 1,
                 'brand_name' => 'Nike',
                 'category_name' => 'Giày thể thao',
-                'price' => 2500000,
-                'discount_price' => 0,
-                'description' => 'Nike Air Max 2025 là phiên bản mới nhất của dòng giày Air Max, mang đến sự thoải mái và phong cách hiện đại. Với công nghệ đệm Air đột phá, giày cung cấp khả năng hấp thụ sốc tối ưu và độ bền vượt trội.',
-                'details' => 'Nike Air Max 2025 được thiết kế với upper làm từ vật liệu nhẹ và thoáng khí, giúp chân luôn khô ráo và thoải mái trong suốt quá trình sử dụng. Đế giữa với công nghệ Air đệm toàn bộ bàn chân, mang lại cảm giác nhẹ nhàng như đang đi trên mây. Đế ngoài với hoa văn đặc trưng cung cấp độ bám dính tốt trên mọi bề mặt.',
+                'price' => 3200000,
+                'discount_price' => 2880000,
+                'image_url' => '/project/public/images/products/tải xuống.jpg',
+                'description' => 'Nike Air Max 270 là phiên bản mới nhất của dòng giày Air Max, mang đến sự thoải mái và phong cách hiện đại. Với công nghệ đệm Air đột phá, giày cung cấp khả năng hấp thụ sốc tối ưu và độ bền vượt trội.',
+                'details' => 'Nike Air Max 270 được thiết kế với upper làm từ vật liệu nhẹ và thoáng khí, giúp chân luôn khô ráo và thoải mái trong suốt quá trình sử dụng. Đế giữa với công nghệ Air đệm toàn bộ bàn chân, mang lại cảm giác nhẹ nhàng như đang đi trên mây. Đế ngoài với hoa văn đặc trưng cung cấp độ bám dính tốt trên mọi bề mặt.',
                 'material' => 'Vải dệt thoáng khí, đệm Air, cao su',
                 'origin' => 'Việt Nam',
                 'warranty' => '12 tháng',
@@ -53,15 +59,16 @@ class Product extends Model {
             ],
             2 => [
                 'id' => 2,
-                'name' => 'Adidas Ultraboost 5.0',
+                'name' => 'Adidas Ultraboost 21',
                 'brand_id' => 2,
                 'category_id' => 2,
                 'brand_name' => 'Adidas',
                 'category_name' => 'Giày chạy bộ',
-                'price' => 3200000,
-                'discount_price' => 0,
-                'description' => 'Adidas Ultraboost 5.0 là đôi giày chạy bộ cao cấp với công nghệ Boost đệm tiên tiến. Thiết kế hiện đại kết hợp với hiệu suất vượt trội, mang đến trải nghiệm chạy bộ hoàn hảo.',
-                'details' => 'Adidas Ultraboost 5.0 sử dụng công nghệ Boost đệm đột phá, cung cấp năng lượng trả về tối đa với mỗi bước chân. Upper Primeknit+ co giãn và thoáng khí, ôm sát chân nhưng vẫn đảm bảo sự thoải mái. Đế Continental™ Rubber cung cấp độ bám dính vượt trội trên mọi bề mặt.',
+                'price' => 4200000,
+                'discount_price' => 3780000,
+                'image_url' => '/project/public/images/products/tải xuống (1).jpg',
+                'description' => 'Adidas Ultraboost 21 là đôi giày chạy bộ cao cấp với công nghệ Boost đệm tiên tiến. Thiết kế hiện đại kết hợp với hiệu suất vượt trội, mang đến trải nghiệm chạy bộ hoàn hảo.',
+                'details' => 'Adidas Ultraboost 21 sử dụng công nghệ Boost đệm đột phá, cung cấp năng lượng trả về tối đa với mỗi bước chân. Upper Primeknit+ co giãn và thoáng khí, ôm sát chân nhưng vẫn đảm bảo sự thoải mái. Đế Continental™ Rubber cung cấp độ bám dính vượt trội trên mọi bề mặt.',
                 'material' => 'Primeknit+, Boost, Continental™ Rubber',
                 'origin' => 'Indonesia',
                 'warranty' => '12 tháng',
@@ -71,15 +78,16 @@ class Product extends Model {
             ],
             3 => [
                 'id' => 3,
-                'name' => 'Puma RS-X Toys',
+                'name' => 'Puma RS-X³',
                 'brand_id' => 3,
                 'category_id' => 3,
                 'brand_name' => 'Puma',
                 'category_name' => 'Giày thời trang',
                 'price' => 2800000,
                 'discount_price' => 1960000,
-                'description' => 'Puma RS-X Toys là phiên bản mới của dòng giày RS-X, lấy cảm hứng từ thế giới đồ chơi. Thiết kế đầy màu sắc và phong cách retro hiện đại, mang đến vẻ ngoài độc đáo và ấn tượng.',
-                'details' => 'Puma RS-X Toys kết hợp giữa phong cách retro và hiện đại với upper đa màu sắc và chi tiết thiết kế độc đáo. Đệm RS (Reinforced Structure) cung cấp sự thoải mái tối ưu cho cả ngày dài. Đế ngoài với hoa văn đặc trưng cung cấp độ bám dính tốt và độ bền cao.',
+                'image_url' => '/project/public/images/products/tải xuống (2).jpg',
+                'description' => 'Puma RS-X³ là phiên bản mới của dòng giày RS-X, lấy cảm hứng từ thế giới đồ chơi. Thiết kế đầy màu sắc và phong cách retro hiện đại, mang đến vẻ ngoài độc đáo và ấn tượng.',
+                'details' => 'Puma RS-X³ kết hợp giữa phong cách retro và hiện đại với upper đa màu sắc và chi tiết thiết kế độc đáo. Đệm RS (Reinforced Structure) cung cấp sự thoải mái tối ưu cho cả ngày dài. Đế ngoài với hoa văn đặc trưng cung cấp độ bám dính tốt và độ bền cao.',
                 'material' => 'Vải dệt, đệm RS, cao su',
                 'origin' => 'Trung Quốc',
                 'warranty' => '6 tháng',
@@ -89,19 +97,58 @@ class Product extends Model {
             ],
             4 => [
                 'id' => 4,
-                'name' => 'Converse Chuck 70s High Top',
+                'name' => 'Vans Classic Slip-On',
                 'brand_id' => 4,
-                'category_id' => 3,
-                'brand_name' => 'Converse',
+                'category_id' => 2,
+                'brand_name' => 'Vans',
                 'category_name' => 'Giày thời trang',
                 'price' => 1800000,
-                'discount_price' => 0,
-                'description' => 'Converse Chuck 70s High Top là phiên bản cao cấp của dòng giày Chuck Taylor All Star cổ điển. Với chất liệu và công nghệ sản xuất cải tiến, giày mang đến sự thoải mái và độ bền vượt trội so với phiên bản thông thường.',
-                'details' => 'Converse Chuck 70s High Top sử dụng vải canvas dày và bền hơn, cùng với đế cao su đặc biệt. Thiết kế cổ điển với các chi tiết như viền cổ màu kem, logo Converse đặc trưng và đế cao su màu kem. Giày phù hợp với nhiều phong cách thời trang khác nhau, từ casual đến street style.',
-                'material' => 'Canvas, cao su',
+                'discount_price' => 1620000,
+                'image_url' => '/project/public/images/products/vans.jpg',
+                'description' => 'Vans Classic Slip-On là đôi giày sneaker cổ điển với thiết kế đơn giản, dễ mặc. Phù hợp cho mọi hoạt động hàng ngày, từ đi dạo đến đi chơi.',
+                'details' => 'Vans Classic Slip-On có upper làm từ vải canvas bền bỉ, đế cao su vulcanized cung cấp độ bám dính tốt và độ bền cao. Thiết kế không có dây buộc giúp dễ dàng mang và tháo.',
+                'material' => 'Canvas, cao su vulcanized',
                 'origin' => 'Việt Nam',
                 'warranty' => '6 tháng',
                 'stock' => 40,
+                'created_at' => '2024-01-01 00:00:00',
+                'updated_at' => '2024-01-01 00:00:00'
+            ],
+            5 => [
+                'id' => 5,
+                'name' => 'Nike Air Force 1',
+                'brand_id' => 1,
+                'category_id' => 2,
+                'brand_name' => 'Nike',
+                'category_name' => 'Giày thời trang',
+                'price' => 2500000,
+                'discount_price' => 2250000,
+                'image_url' => '/project/public/images/products/tải xuống (3).jpg',
+                'description' => 'Nike Air Force 1 là đôi giày sneaker cổ điển với thiết kế đơn giản, phong cách. Phù hợp cho mọi hoạt động hàng ngày, từ đi dạo đến đi chơi.',
+                'details' => 'Nike Air Force 1 có upper làm từ da tổng hợp bền bỉ, đế giữa với công nghệ Air cung cấp sự thoải mái tối ưu. Thiết kế cổ điển với logo Nike Swoosh nổi bật.',
+                'material' => 'Da tổng hợp, đệm Air, cao su',
+                'origin' => 'Việt Nam',
+                'warranty' => '12 tháng',
+                'stock' => 30,
+                'created_at' => '2024-01-01 00:00:00',
+                'updated_at' => '2024-01-01 00:00:00'
+            ],
+            6 => [
+                'id' => 6,
+                'name' => 'Adidas NMD',
+                'brand_id' => 2,
+                'category_id' => 1,
+                'brand_name' => 'Adidas',
+                'category_name' => 'Giày thể thao',
+                'price' => 3500000,
+                'discount_price' => 3150000,
+                'image_url' => '/project/public/images/products/tải xuống (4).jpg',
+                'description' => 'Adidas NMD là đôi giày sneaker hiện đại với công nghệ Boost đệm tiên tiến. Thiết kế đột phá kết hợp với hiệu suất vượt trội, mang đến trải nghiệm thoải mái tối ưu.',
+                'details' => 'Adidas NMD sử dụng công nghệ Boost đệm đột phá, cung cấp năng lượng trả về tối đa với mỗi bước chân. Upper Primeknit co giãn và thoáng khí, ôm sát chân nhưng vẫn đảm bảo sự thoải mái. Đế Continental™ Rubber cung cấp độ bám dính vượt trội trên mọi bề mặt.',
+                'material' => 'Primeknit, Boost, Continental™ Rubber',
+                'origin' => 'Indonesia',
+                'warranty' => '12 tháng',
+                'stock' => 20,
                 'created_at' => '2024-01-01 00:00:00',
                 'updated_at' => '2024-01-01 00:00:00'
             ]
@@ -134,80 +181,120 @@ class Product extends Model {
                 [
                     'id' => 1,
                     'product_id' => 1,
-                    'image_url' => 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 1
+                    'image_url' => '/project/public/images/products/tải xuống.jpg',
+                    'is_primary' => 1
                 ],
                 [
                     'id' => 2,
                     'product_id' => 1,
-                    'image_url' => 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 0
+                    'image_url' => '/project/public/images/products/tải xuống (1).jpg',
+                    'is_primary' => 0
                 ],
                 [
                     'id' => 3,
                     'product_id' => 1,
-                    'image_url' => 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 0
+                    'image_url' => '/project/public/images/products/tải xuống (2).jpg',
+                    'is_primary' => 0
                 ]
             ],
             2 => [
                 [
                     'id' => 4,
                     'product_id' => 2,
-                    'image_url' => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 1
+                    'image_url' => '/project/public/images/products/tải xuống (1).jpg',
+                    'is_primary' => 1
                 ],
                 [
                     'id' => 5,
                     'product_id' => 2,
-                    'image_url' => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 0
+                    'image_url' => '/project/public/images/products/tải xuống (3).jpg',
+                    'is_primary' => 0
                 ],
                 [
                     'id' => 6,
                     'product_id' => 2,
-                    'image_url' => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 0
+                    'image_url' => '/project/public/images/products/tải xuống (4).jpg',
+                    'is_primary' => 0
                 ]
             ],
             3 => [
                 [
                     'id' => 7,
                     'product_id' => 3,
-                    'image_url' => 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 1
+                    'image_url' => '/project/public/images/products/tải xuống (2).jpg',
+                    'is_primary' => 1
                 ],
                 [
                     'id' => 8,
                     'product_id' => 3,
-                    'image_url' => 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 0
+                    'image_url' => '/project/public/images/products/tải xuống.jpg',
+                    'is_primary' => 0
                 ],
                 [
                     'id' => 9,
                     'product_id' => 3,
-                    'image_url' => 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 0
+                    'image_url' => '/project/public/images/products/tải xuống (1).jpg',
+                    'is_primary' => 0
                 ]
             ],
             4 => [
                 [
                     'id' => 10,
                     'product_id' => 4,
-                    'image_url' => 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 1
+                    'image_url' => '/project/public/images/products/vans.jpg',
+                    'is_primary' => 1
                 ],
                 [
                     'id' => 11,
                     'product_id' => 4,
-                    'image_url' => 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 0
+                    'image_url' => '/project/public/images/products/tải xuống (3).jpg',
+                    'is_primary' => 0
                 ],
                 [
                     'id' => 12,
                     'product_id' => 4,
-                    'image_url' => 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                    'is_main' => 0
+                    'image_url' => '/project/public/images/products/tải xuống (4).jpg',
+                    'is_primary' => 0
+                ]
+            ],
+            5 => [
+                [
+                    'id' => 13,
+                    'product_id' => 5,
+                    'image_url' => '/project/public/images/products/tải xuống (3).jpg',
+                    'is_primary' => 1
+                ],
+                [
+                    'id' => 14,
+                    'product_id' => 5,
+                    'image_url' => '/project/public/images/products/tải xuống.jpg',
+                    'is_primary' => 0
+                ],
+                [
+                    'id' => 15,
+                    'product_id' => 5,
+                    'image_url' => '/project/public/images/products/tải xuống (1).jpg',
+                    'is_primary' => 0
+                ]
+            ],
+            6 => [
+                [
+                    'id' => 16,
+                    'product_id' => 6,
+                    'image_url' => '/project/public/images/products/tải xuống (4).jpg',
+                    'is_primary' => 1
+                ],
+                [
+                    'id' => 17,
+                    'product_id' => 6,
+                    'image_url' => '/project/public/images/products/tải xuống (2).jpg',
+                    'is_primary' => 0
+                ],
+                [
+                    'id' => 18,
+                    'product_id' => 6,
+                    'image_url' => '/project/public/images/products/vans.jpg',
+                    'is_primary' => 0
                 ]
             ]
         ];
@@ -390,16 +477,16 @@ class Product extends Model {
             1 => [
                 [
                     'id' => 2,
-                    'name' => 'Adidas Ultraboost 5.0',
+                    'name' => 'Adidas Ultraboost 21',
                     'brand_name' => 'Adidas',
                     'category_name' => 'Giày chạy bộ',
-                    'price' => 3200000,
-                    'discount_price' => 0,
+                    'price' => 4200000,
+                    'discount_price' => 3780000,
                     'image_url' => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
                 ],
                 [
                     'id' => 3,
-                    'name' => 'Puma RS-X Toys',
+                    'name' => 'Puma RS-X³',
                     'brand_name' => 'Puma',
                     'category_name' => 'Giày thời trang',
                     'price' => 2800000,
@@ -408,27 +495,27 @@ class Product extends Model {
                 ],
                 [
                     'id' => 4,
-                    'name' => 'Converse Chuck 70s High Top',
-                    'brand_name' => 'Converse',
+                    'name' => 'Vans Classic Slip-On',
+                    'brand_name' => 'Vans',
                     'category_name' => 'Giày thời trang',
                     'price' => 1800000,
-                    'discount_price' => 0,
+                    'discount_price' => 1620000,
                     'image_url' => 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
                 ]
             ],
             2 => [
                 [
                     'id' => 1,
-                    'name' => 'Nike Air Max 2025',
+                    'name' => 'Nike Air Max 270',
                     'brand_name' => 'Nike',
                     'category_name' => 'Giày thể thao',
-                    'price' => 2500000,
-                    'discount_price' => 0,
+                    'price' => 3200000,
+                    'discount_price' => 2880000,
                     'image_url' => 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
                 ],
                 [
                     'id' => 3,
-                    'name' => 'Puma RS-X Toys',
+                    'name' => 'Puma RS-X³',
                     'brand_name' => 'Puma',
                     'category_name' => 'Giày thời trang',
                     'price' => 2800000,
@@ -437,65 +524,65 @@ class Product extends Model {
                 ],
                 [
                     'id' => 4,
-                    'name' => 'Converse Chuck 70s High Top',
-                    'brand_name' => 'Converse',
+                    'name' => 'Vans Classic Slip-On',
+                    'brand_name' => 'Vans',
                     'category_name' => 'Giày thời trang',
                     'price' => 1800000,
-                    'discount_price' => 0,
+                    'discount_price' => 1620000,
                     'image_url' => 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
                 ]
             ],
             3 => [
                 [
                     'id' => 1,
-                    'name' => 'Nike Air Max 2025',
+                    'name' => 'Nike Air Max 270',
                     'brand_name' => 'Nike',
                     'category_name' => 'Giày thể thao',
-                    'price' => 2500000,
-                    'discount_price' => 0,
+                    'price' => 3200000,
+                    'discount_price' => 2880000,
                     'image_url' => 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
                 ],
                 [
                     'id' => 2,
-                    'name' => 'Adidas Ultraboost 5.0',
+                    'name' => 'Adidas Ultraboost 21',
                     'brand_name' => 'Adidas',
                     'category_name' => 'Giày chạy bộ',
-                    'price' => 3200000,
-                    'discount_price' => 0,
+                    'price' => 4200000,
+                    'discount_price' => 3780000,
                     'image_url' => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
                 ],
                 [
                     'id' => 4,
-                    'name' => 'Converse Chuck 70s High Top',
-                    'brand_name' => 'Converse',
+                    'name' => 'Vans Classic Slip-On',
+                    'brand_name' => 'Vans',
                     'category_name' => 'Giày thời trang',
                     'price' => 1800000,
-                    'discount_price' => 0,
+                    'discount_price' => 1620000,
                     'image_url' => 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
                 ]
             ],
             4 => [
                 [
                     'id' => 1,
-                    'name' => 'Nike Air Max 2025',
+                    'name' => 'Nike Air Max 270',
                     'brand_name' => 'Nike',
                     'category_name' => 'Giày thể thao',
-                    'price' => 2500000,
-                    'discount_price' => 0,
+                    'price' => 3200000,
+                    'discount_price' => 2880000,
                     'image_url' => 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
                 ],
                 [
                     'id' => 2,
-                    'name' => 'Adidas Ultraboost 5.0',
+                    'name' => 'Adidas Ultraboost 21',
                     'brand_name' => 'Adidas',
                     'category_name' => 'Giày chạy bộ',
-                    'price' => 3200000,
-                    'discount_price' => 0,
+                    'price' => 4200000,
+                    'discount_price' => 3780000,
                     'image_url' => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
                 ],
                 [
                     'id' => 3,
-                    'name' => 'Puma RS-X Toys',
+                    'name' => 'Puma RS-X³',
                     'brand_name' => 'Puma',
                     'category_name' => 'Giày thời trang',
                     'price' => 2800000,
@@ -650,35 +737,37 @@ class Product extends Model {
     public function getProducts($category = null, $offset = 0, $limit = 12) {
         try {
             $query = "SELECT p.*, b.name as brand_name, c.name as category_name,
-                     (SELECT image_url FROM product_images WHERE product_id = p.id AND is_main = 1 LIMIT 1) as main_image
+                     (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as image_url
                      FROM " . $this->table . " p
                      LEFT JOIN brands b ON p.brand_id = b.id
                      LEFT JOIN categories c ON p.category_id = c.id";
             
             if ($category) {
-                $query .= " WHERE p.category_id = :category_id";
+                $query .= " WHERE p.category_id = :category";
             }
             
             $query .= " ORDER BY p.created_at DESC LIMIT :offset, :limit";
             
             $stmt = $this->conn->prepare($query);
+            
             if ($category) {
-                $stmt->bindParam(':category_id', $category);
+                $stmt->bindParam(':category', $category, PDO::PARAM_INT);
             }
+            
             $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
             $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
             $stmt->execute();
             
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            // If no data found in database, return sample data
             if (empty($result)) {
                 return $this->getSampleProducts($offset, $limit);
             }
             
             return $result;
         } catch (PDOException $e) {
-            // Return sample data if database error
+            // Log error and return sample data
+            error_log("Error fetching products: " . $e->getMessage());
             return $this->getSampleProducts($offset, $limit);
         }
     }
@@ -730,51 +819,75 @@ class Product extends Model {
         $sampleProducts = [
             [
                 'id' => 1,
-                'name' => 'Nike Air Max 2025',
+                'name' => 'Nike Air Max 270',
                 'brand_id' => 1,
                 'category_id' => 1,
                 'brand_name' => 'Nike',
                 'category_name' => 'Giày thể thao',
-                'price' => 2500000,
-                'discount_price' => 0,
-                'description' => 'Nike Air Max 2025 là phiên bản mới nhất của dòng giày Air Max.',
-                'image' => 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+                'price' => 3200000,
+                'sale_price' => 2880000,
+                'description' => 'Giày thể thao Nike Air Max 270 với công nghệ đệm Air độc quyền',
+                'image_url' => '/project/public/images/products/tải xuống.jpg'
             ],
             [
                 'id' => 2,
-                'name' => 'Adidas Ultraboost 5.0',
+                'name' => 'Adidas Ultraboost 21',
                 'brand_id' => 2,
-                'category_id' => 2,
+                'category_id' => 3,
                 'brand_name' => 'Adidas',
                 'category_name' => 'Giày chạy bộ',
-                'price' => 3200000,
-                'discount_price' => 0,
-                'description' => 'Adidas Ultraboost 5.0 là đôi giày chạy bộ cao cấp với công nghệ Boost đệm tiên tiến.',
-                'image' => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+                'price' => 4200000,
+                'sale_price' => 3780000,
+                'description' => 'Giày chạy bộ Adidas Ultraboost 21 với công nghệ đệm Boost',
+                'image_url' => '/project/public/images/products/tải xuống (1).jpg'
             ],
             [
                 'id' => 3,
-                'name' => 'Puma RS-X Toys',
+                'name' => 'Puma RS-X³',
                 'brand_id' => 3,
-                'category_id' => 3,
+                'category_id' => 2,
                 'brand_name' => 'Puma',
                 'category_name' => 'Giày thời trang',
                 'price' => 2800000,
-                'discount_price' => 1960000,
-                'description' => 'Puma RS-X Toys là phiên bản mới của dòng giày RS-X, lấy cảm hứng từ thế giới đồ chơi.',
-                'image' => 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+                'sale_price' => 2520000,
+                'description' => 'Giày sneaker Puma RS-X³ với thiết kế đột phá',
+                'image_url' => '/project/public/images/products/tải xuống (2).jpg'
             ],
             [
                 'id' => 4,
-                'name' => 'Converse Chuck 70s High Top',
+                'name' => 'Vans Classic Slip-On',
                 'brand_id' => 4,
-                'category_id' => 3,
-                'brand_name' => 'Converse',
+                'category_id' => 2,
+                'brand_name' => 'Vans',
                 'category_name' => 'Giày thời trang',
                 'price' => 1800000,
-                'discount_price' => 0,
-                'description' => 'Converse Chuck 70s High Top là phiên bản cao cấp của dòng giày Chuck Taylor All Star cổ điển.',
-                'image' => 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+                'sale_price' => 1620000,
+                'description' => 'Giày sneaker Vans Classic Slip-On với thiết kế đơn giản, dễ mặc',
+                'image_url' => '/project/public/images/products/vans.jpg'
+            ],
+            [
+                'id' => 5,
+                'name' => 'Nike Air Force 1',
+                'brand_id' => 1,
+                'category_id' => 2,
+                'brand_name' => 'Nike',
+                'category_name' => 'Giày thời trang',
+                'price' => 2500000,
+                'sale_price' => 2250000,
+                'description' => 'Giày sneaker Nike Air Force 1 với thiết kế cổ điển, phong cách',
+                'image_url' => '/project/public/images/products/tải xuống (3).jpg'
+            ],
+            [
+                'id' => 6,
+                'name' => 'Adidas NMD',
+                'brand_id' => 2,
+                'category_id' => 1,
+                'brand_name' => 'Adidas',
+                'category_name' => 'Giày thể thao',
+                'price' => 3500000,
+                'sale_price' => 3150000,
+                'description' => 'Giày sneaker Adidas NMD với công nghệ đệm Boost và thiết kế hiện đại',
+                'image_url' => '/project/public/images/products/tải xuống (4).jpg'
             ]
         ];
         
@@ -799,6 +912,94 @@ class Product extends Model {
             ['id' => 3, 'name' => 'Puma', 'slug' => 'puma'],
             ['id' => 4, 'name' => 'Converse', 'slug' => 'converse']
         ];
+    }
+
+    public function addProductImage($productId, $imageUrl) {
+        $sql = "INSERT INTO product_images (product_id, image_url, is_primary) VALUES (?, ?, ?)";
+        $isPrimary = $this->isFirstImage($productId) ? 1 : 0;
+        
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$productId, $imageUrl, $isPrimary]);
+            return $this->db->lastInsertId();
+        } catch (PDOException $e) {
+            throw new Exception("Error adding product image: " . $e->getMessage());
+        }
+    }
+
+    private function isFirstImage($productId) {
+        $sql = "SELECT COUNT(*) FROM product_images WHERE product_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$productId]);
+        return $stmt->fetchColumn() === 0;
+    }
+
+    public function updateProduct($productId, $data) {
+        $sql = "UPDATE products SET 
+                name = ?, 
+                brand = ?, 
+                category = ?, 
+                price = ?, 
+                sale_price = ?, 
+                description = ? 
+                WHERE id = ?";
+                
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                $data['name'],
+                $data['brand'],
+                $data['category'],
+                $data['price'],
+                $data['sale_price'],
+                $data['description'],
+                $productId
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            throw new Exception("Error updating product: " . $e->getMessage());
+        }
+    }
+
+    public function createProduct($data) {
+        $sql = "INSERT INTO products (name, brand, category, price, sale_price, description) 
+                VALUES (?, ?, ?, ?, ?, ?)";
+                
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                $data['name'],
+                $data['brand'],
+                $data['category'],
+                $data['price'],
+                $data['sale_price'],
+                $data['description']
+            ]);
+            return $this->db->lastInsertId();
+        } catch (PDOException $e) {
+            throw new Exception("Error creating product: " . $e->getMessage());
+        }
+    }
+
+    public function getImageById($imageId) {
+        $sql = "SELECT * FROM product_images WHERE id = ?";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$imageId]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Error getting image: " . $e->getMessage());
+        }
+    }
+
+    public function deleteImage($imageId) {
+        $sql = "DELETE FROM product_images WHERE id = ?";
+        try {
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$imageId]);
+        } catch (PDOException $e) {
+            throw new Exception("Error deleting image: " . $e->getMessage());
+        }
     }
 }
 ?> 

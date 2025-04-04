@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/Database.php';
 
 class Model {
     protected $conn;
@@ -7,7 +7,7 @@ class Model {
     
     public function __construct() {
         $database = new Database();
-        $this->conn = $database->connect();
+        $this->conn = $database->getConnection();
     }
     
     // Phương thức cơ bản để lấy tất cả bản ghi

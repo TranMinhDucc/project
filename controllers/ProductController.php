@@ -84,5 +84,100 @@ class ProductController {
             include 'views/errors/error.php';
         }
     }
+
+    public function uploadImage($file, $productId) {
+        $targetDir = "public/images/products/";
+        $fileName = basename($file["name"]);
+        $targetFilePath = $targetDir . $fileName;
+        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+        
+        // Allow certain file formats
+        $allowTypes = array('jpg','png','jpeg','gif');
+        if (!in_array(strtolower($fileType), $allowTypes)) {
+            throw new Exception("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+        }
+        
+        // Generate unique filename
+        $fileName = uniqid() . '.' . $fileType;
+        $targetFilePath = $targetDir . $fileName;
+        
+        // Upload file to server
+        if (move_uploaded_file($file["tmp_name"], $targetFilePath)) {
+            // Insert image file name into database
+            $this->productModel->addProductImage($productId, $fileName);
+            return $fileName;
+        } else {
+            throw new Exception("Sorry, there was an error uploading your file.");
+        }
+    }
+
+    public function handleProductForm() {
+        try {
+            $productId = isset($_POST['product_id']) ? $_POST['product_id'] : null;
+            $productData = [
+                'name' => $_POST['name'],
+                'brand' => $_POST['brand'],
+                'category' => $_POST['category'],
+                'price' => $_POST['price'],
+                'sale_price' => $_POST['sale_price'],
+                'description' => $_POST['description']
+            ];
+
+            if ($productId) {
+                // Update existing product
+                $this->productModel->updateProduct($productId, $productData);
+            } else {
+                // Create new product
+                $productId = $this->productModel->createProduct($productData);
+            }
+
+            // Handle image upload
+            if (!empty($_FILES["images"]["name"][0])) {
+                foreach ($_FILES["images"]["tmp_name"] as $key => $tmp_name) {
+                    $file = [
+                        "name" => $_FILES["images"]["name"][$key],
+                        "type" => $_FILES["images"]["type"][$key],
+                        "tmp_name" => $tmp_name,
+                        "error" => $_FILES["images"]["error"][$key],
+                        "size" => $_FILES["images"]["size"][$key]
+                    ];
+                    $this->uploadImage($file, $productId);
+                }
+            }
+
+            header("Location: /project/admin/products");
+            exit();
+        } catch (Exception $e) {
+            // Handle error
+            $_SESSION['error'] = $e->getMessage();
+            header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit();
+        }
+    }
+
+    public function deleteImage() {
+        try {
+            $imageId = $_POST['image_id'];
+            $image = $this->productModel->getImageById($imageId);
+            
+            if ($image) {
+                // Delete file from server
+                $filePath = "public/images/products/" . $image['image_url'];
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+                
+                // Delete from database
+                $this->productModel->deleteImage($imageId);
+                
+                echo json_encode(['success' => true]);
+            } else {
+                throw new Exception("Image not found");
+            }
+        } catch (Exception $e) {
+            http_response_code(400);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+    }
 }
 ?> 

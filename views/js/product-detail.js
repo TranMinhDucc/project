@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainImage = document.getElementById('main-product-image');
     const thumbnails = document.querySelectorAll('.thumbnail');
     
-    if (thumbnails.length > 0) {
+    if (thumbnails.length > 0 && mainImage) {
         thumbnails.forEach(thumbnail => {
             thumbnail.addEventListener('click', function() {
                 const imageUrl = this.getAttribute('data-image');
-                mainImage.setAttribute('src', imageUrl);
+                mainImage.src = imageUrl;
                 
                 // Update active thumbnail
                 thumbnails.forEach(thumb => thumb.classList.remove('active'));
@@ -100,6 +100,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             });
+        });
+    }
+    
+    // Xử lý hiệu ứng zoom khi di chuột qua ảnh chính
+    const mainImageContainer = document.querySelector('.main-image');
+    
+    if (mainImageContainer && mainImage) {
+        mainImageContainer.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Tính toán vị trí zoom
+            const xPercent = x / rect.width * 100;
+            const yPercent = y / rect.height * 100;
+            
+            // Áp dụng hiệu ứng zoom
+            mainImage.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+        });
+        
+        // Reset zoom khi di chuột ra khỏi ảnh
+        mainImageContainer.addEventListener('mouseleave', function() {
+            mainImage.style.transformOrigin = 'center center';
         });
     }
     
