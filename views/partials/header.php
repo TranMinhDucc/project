@@ -20,8 +20,10 @@
             
             <div class="header-actions">
                 <div class="search-box">
-                    <input type="text" placeholder="Tìm kiếm...">
-                    <button><i class="fas fa-search"></i></button>
+                    <form action="/project/search" method="GET">
+                        <input type="text" name="q" placeholder="Tìm kiếm..." value="<?php echo isset($_GET['q']) ? htmlspecialchars($_GET['q']) : ''; ?>">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
                 </div>
                 <div class="user-actions">
                     <a href="/project/account" class="icon-btn"><i class="fas fa-user"></i></a>

@@ -31,9 +31,11 @@
             </nav>
             
             <div class="header-actions">
-                <div class="search-box">
-                    <input type="text" placeholder="Tìm kiếm...">
-                    <button><i class="fas fa-search"></i></button>
+                <div class="search-bar">
+                    <form action="/project/search" method="GET">
+                        <input type="text" name="q" placeholder="Tìm kiếm..." autocomplete="off">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
                 </div>
                 <div class="user-actions">
                     <a href="/account" class="icon-btn"><i class="fas fa-user"></i></a>

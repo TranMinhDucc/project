@@ -179,5 +179,83 @@ class ProductController {
             echo json_encode(['error' => $e->getMessage()]);
         }
     }
+
+    public function search() {
+        try {
+            // Get search parameters
+            $keyword = isset($_GET['q']) ? trim($_GET['q']) : '';
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $limit = 12;
+            $sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
+            
+            // Get filter parameters
+            $filters = [];
+            
+            // Brand filter
+            if (isset($_GET['brands']) && is_array($_GET['brands'])) {
+                $filters['brands'] = $_GET['brands'];
+            }
+            
+            // Category filter
+            if (isset($_GET['category']) && !empty($_GET['category'])) {
+                $filters['category'] = $_GET['category'];
+            }
+            
+            // Price range filter
+            if (isset($_GET['min_price']) && !empty($_GET['min_price'])) {
+                $filters['min_price'] = (int)$_GET['min_price'];
+            }
+            
+            if (isset($_GET['max_price']) && !empty($_GET['max_price'])) {
+                $filters['max_price'] = (int)$_GET['max_price'];
+            }
+            
+            // Size filter
+            if (isset($_GET['sizes']) && is_array($_GET['sizes'])) {
+                $filters['sizes'] = $_GET['sizes'];
+            }
+            
+            // Color filter
+            if (isset($_GET['colors']) && is_array($_GET['colors'])) {
+                $filters['colors'] = $_GET['colors'];
+            }
+            
+            // Get search results
+            $products = $this->productModel->searchProducts($keyword, $filters, $sort, $page, $limit);
+            
+            // Get total results count
+            $totalResults = $this->productModel->getTotalSearchResults($keyword, $filters);
+            
+            // Calculate total pages
+            $totalPages = ceil($totalResults / $limit);
+            
+            // Ensure page is within valid range
+            $page = max(1, min($page, $totalPages));
+            
+            // Get all categories for filter
+            $categories = $this->productModel->getAllCategories();
+            
+            // Get all brands for filter
+            $brands = $this->productModel->getAllBrands();
+            
+            // Get all sizes for filter
+            $sizes = $this->productModel->getAllSizes();
+            
+            // Get all colors for filter
+            $colors = $this->productModel->getAllColors();
+            
+            // Load the view
+            include 'views/product/search.php';
+        } catch (Exception $e) {
+            // Log error
+            error_log($e->getMessage());
+            
+            // Set error message
+            $error = 'Có lỗi xảy ra khi tìm kiếm sản phẩm. Vui lòng thử lại sau.';
+            
+            // Load error view
+            include 'views/errors/error.php';
+        }
+    }
 }
 ?> 

@@ -45,6 +45,11 @@ switch ($request) {
         $controller->list();
         break;
         
+    case '/search':
+        $controller = new ProductController();
+        $controller->search();
+        break;
+        
     default:
         // 404 Not Found
         http_response_code(404);
