@@ -176,7 +176,7 @@
                     </form>
                 </div>
                 <div class="user-actions">
-                    <a href="#" class="icon-btn" id="user-icon"><i class="fas fa-user"></i></a>
+                    <a href="/project/register" class="icon-btn" id="user-icon"><i class="fas fa-user"></i></a>
                     <a href="/project/cart.php" class="icon-btn cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>

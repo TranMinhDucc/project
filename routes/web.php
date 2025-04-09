@@ -2,6 +2,7 @@
 // Include necessary files
 require_once 'controllers/HomeController.php';
 require_once 'controllers/ProductController.php';
+require_once 'controllers/AuthController.php';
 
 // Define routes
 $request = $_SERVER['REQUEST_URI'];
@@ -27,17 +28,34 @@ if (empty($request)) {
     $request = '/';
 }
 
-// Route handling
+// Check for dynamic product route first
+if (preg_match('/^\/product\/(\d+)$/', $request, $matches)) {
+    $productId = $matches[1];
+    $controller = new ProductController();
+    $controller->detail($productId);
+    exit;
+}
+
+// Static route handling
 switch ($request) {
     case '/':
         $controller = new HomeController();
         $controller->index();
         break;
         
-    case (preg_match('/^\/product\/(\d+)$/', $request, $matches) ? true : false):
-        $productId = $matches[1];
+    case '/register':
+        $controller = new AuthController();
+        $controller->register();
+        break;
+        
+    case '/login':
+        $controller = new AuthController();
+        $controller->login();
+        break;
+        
+    case '/cart':
         $controller = new ProductController();
-        $controller->detail($productId);
+        $controller->cart();
         break;
         
     case '/products':
