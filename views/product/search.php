@@ -9,6 +9,38 @@
     <link rel="stylesheet" href="/project/views/css/style.css">
     <link rel="stylesheet" href="/project/views/css/product-list.css">
     <link rel="stylesheet" href="/project/views/css/search.css">
+    <style>
+        .cart-container {
+            padding: 20px;
+        }
+
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .remove-btn, .checkout-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->

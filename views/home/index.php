@@ -7,6 +7,144 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/project/views/css/style.css">
+    <style>
+        .auth-forms {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .auth-forms form {
+            width: 45%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        .auth-forms input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .auth-forms button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .auth-forms {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .cart-container {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-details h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .item-details p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .remove-btn {
+            padding: 8px 16px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .remove-btn:hover {
+            background-color: #e60000;
+        }
+
+        .cart-summary {
+            text-align: right;
+        }
+
+        .cart-summary h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .checkout-btn {
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -38,8 +176,8 @@
                     </form>
                 </div>
                 <div class="user-actions">
-                    <a href="/account" class="icon-btn"><i class="fas fa-user"></i></a>
-                    <a href="/cart" class="icon-btn cart-icon">
+                    <a href="#" class="icon-btn" id="user-icon"><i class="fas fa-user"></i></a>
+                    <a href="/project/cart.php" class="icon-btn cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>
                     </a>
@@ -318,6 +456,29 @@
         </div>
     </section>
 
+    <!-- Modal for Auth Forms -->
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-forms">
+            <!-- Registration Form -->
+            <form id="register-form" action="/project/register" method="POST">
+                <h2>Đăng Ký</h2>
+                <input type="text" name="username" placeholder="Tên đăng nhập" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Mật khẩu" required>
+                <input type="password" name="confirm_password" placeholder="Xác nhận mật khẩu" required>
+                <button type="submit">Đăng Ký</button>
+            </form>
+
+            <!-- Login Form -->
+            <form id="login-form" action="/project/login" method="POST">
+                <h2>Đăng Nhập</h2>
+                <input type="text" name="username" placeholder="Tên đăng nhập" required>
+                <input type="password" name="password" placeholder="Mật khẩu" required>
+                <button type="submit">Đăng Nhập</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -381,5 +542,28 @@
     </footer>
 
     <script src="/project/views/js/main.js"></script>
+    <script>
+    document.getElementById('register-form').addEventListener('submit', function(event) {
+        const password = this.password.value;
+        const confirmPassword = this.confirm_password.value;
+
+        if (password !== confirmPassword) {
+            event.preventDefault();
+            alert('Mật khẩu xác nhận không khớp.');
+        }
+    });
+
+    document.getElementById('user-icon').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('auth-modal').style.display = 'flex';
+    });
+
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('auth-modal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+    </script>
 </body>
 </html>
